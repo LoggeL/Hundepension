@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.appendChild(successBone)
 
         setTimeout(() => {
-          submitButton.innerHTML = 'Nachricht absenden (Bitte nicht mit Pfote drücken)'
+          submitButton.innerHTML =
+            'Nachricht absenden (Bitte nicht mit Pfote drücken)'
           submitButton.disabled = false
           submitButton.style.backgroundColor = ''
           successBone.remove()
@@ -84,8 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateDogPosition = () => {
       currentX += (targetX - currentX) * 0.1
       currentY += (targetY - currentY) * 0.1
-      
-      floatingDog.style.transform = `translate(${currentX * 0.05}px, ${currentY * 0.05}px)`
+
+      floatingDog.style.transform = `translate(${currentX * 0.05}px, ${
+        currentY * 0.05
+      }px)`
       requestAnimationFrame(updateDogPosition)
     }
 
@@ -153,11 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Random dog facts popup
   const dogFacts = [
-    "Hunde können bis zu 100.000 mal besser riechen als Menschen!",
-    "Ein Hundelächeln ist ansteckend - probieren Sie es aus!",
-    "Hunde können Ihre Gefühle lesen... und Ihre Snacks riechen!",
-    "Hundeohren haben 18 verschiedene Bewegungsmuskeln!",
-    "Hunde träumen auch - vielleicht von Ihren Leckerlis?"
+    'Hunde können bis zu 100.000 mal besser riechen als Menschen!',
+    'Ein Hundelächeln ist ansteckend - probieren Sie es aus!',
+    'Hunde können Ihre Gefühle lesen... und Ihre Snacks riechen!',
+    'Hundeohren haben 18 verschiedene Bewegungsmuskeln!',
+    'Hunde träumen auch - vielleicht von Ihren Leckerlis?',
   ]
 
   const showRandomDogFact = () => {
@@ -178,18 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(showRandomDogFact, 30000)
 
   // Add bark sound effect to service cards
-  const barkSounds = [
-    "wuff!",
-    "wau wau!",
-    "wooof!",
-    "*schwanzwedel*"
-  ]
+  const barkSounds = ['wuff!', 'wau wau!', 'wooof!', '*schwanzwedel*']
 
-  document.querySelectorAll('.service-card').forEach(card => {
+  document.querySelectorAll('.service-card').forEach((card) => {
     card.addEventListener('click', () => {
       const bark = document.createElement('div')
       bark.className = 'bark-text'
-      bark.textContent = barkSounds[Math.floor(Math.random() * barkSounds.length)]
+      bark.textContent =
+        barkSounds[Math.floor(Math.random() * barkSounds.length)]
       card.appendChild(bark)
 
       setTimeout(() => bark.remove(), 1000)
@@ -271,4 +270,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   `
   document.head.appendChild(style)
+
+  // Remove the cursor-tail and paw prints code
+  // Add following cat instead
+  const cat = document.createElement('div')
+  cat.className = 'following-cat'
+  document.body.appendChild(cat)
+
+  let mouseX = 0
+  let mouseY = 0
+  let catX = 0
+  let catY = 0
+  let speed = 0.15 // Slightly increased speed for smoother following
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX
+    mouseY = e.clientY
+
+    // Make cat interested when mouse moves quickly
+    const dx = e.movementX
+    const dy = e.movementY
+    const movement = Math.sqrt(dx * dx + dy * dy)
+
+    if (movement > 15) { // Reduced threshold for more responsiveness
+      cat.classList.add('interested')
+      setTimeout(() => cat.classList.remove('interested'), 150)
+    }
+  })
+
+  function updateCatPosition() {
+    // Calculate distance between cat and mouse
+    const distX = mouseX - catX
+    const distY = mouseY - catY
+
+    // Update cat position with smooth following
+    catX += distX * speed
+    catY += distY * speed
+
+    // Apply transformation directly to left/top instead of transform
+    cat.style.left = `${catX}px`
+    cat.style.top = `${catY}px`
+
+    requestAnimationFrame(updateCatPosition)
+  }
+
+  updateCatPosition()
 })
